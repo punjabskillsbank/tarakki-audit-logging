@@ -1,6 +1,6 @@
 package com.tarakki.audit_logging.entity;
 
-import com.tarakki.audit_logging.enums.AuditEventType;
+import com.tarakki.audit_logging.enums.BoardTaskAuditEventType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -34,7 +34,7 @@ public class AuditLog {
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "event_name", columnDefinition = "audit_event_type_enum", nullable = false)
-    private AuditEventType eventName;
+    private BoardTaskAuditEventType eventName;
 
     @Column(name = "performed_by", nullable = false)
     private UUID performedBy;

@@ -2,7 +2,8 @@ package com.tarakki.audit_logging.serviceImpl;
 
 import com.tarakki.audit_logging.dto.AuditEventMessage;
 import com.tarakki.audit_logging.entity.AuditLog;
-import com.tarakki.audit_logging.enums.AuditEventType;
+import com.tarakki.audit_logging.enums.BoardTaskAuditEventType;
+import com.tarakki.audit_logging.exception.InvalidAuditEventException;
 import com.tarakki.audit_logging.repository.AuditLogRepository;
 import com.tarakki.audit_logging.service.AuditLogService;
 import lombok.RequiredArgsConstructor;
@@ -50,14 +51,14 @@ public class AuditLogServiceImpl implements AuditLogService {
         }
     }
 
-    private AuditEventType mapEventName(String eventName) {
+    private BoardTaskAuditEventType mapEventName(String eventName) {
         if (eventName == null) {
-            throw new IllegalArgumentException("Event name cannot be null");
+            throw new InvalidAuditEventException("Event name cannot be null");
         }
         return switch (eventName.toUpperCase()) {
-            case "DELETE_BOARD", "BOARD_DELETED" -> AuditEventType.BOARD_DELETED;
-            case "UPDATE_BOARD", "BOARD_UPDATED" -> AuditEventType.BOARD_UPDATED;
-            default -> throw new IllegalArgumentException("Unsupported event name: " + eventName);
+            case "DELETE_BOARD", "BOARD_DELETED" -> BoardTaskAuditEventType.BOARD_DELETED;
+            case "UPDATE_BOARD", "BOARD_UPDATED" -> BoardTaskAuditEventType.BOARD_UPDATED;
+            default -> throw new InvalidAuditEventException("Unsupported event name: " + eventName);
         };
     }
 

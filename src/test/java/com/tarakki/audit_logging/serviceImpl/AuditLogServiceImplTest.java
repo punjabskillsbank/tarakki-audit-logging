@@ -3,7 +3,8 @@ package com.tarakki.audit_logging.serviceImpl;
 import com.tarakki.audit_logging.datafactory.AuditEventMessageDataFactory;
 import com.tarakki.audit_logging.dto.AuditEventMessage;
 import com.tarakki.audit_logging.entity.AuditLog;
-import com.tarakki.audit_logging.enums.AuditEventType;
+import com.tarakki.audit_logging.enums.BoardTaskAuditEventType;
+import com.tarakki.audit_logging.exception.InvalidAuditEventException;
 import com.tarakki.audit_logging.repository.AuditLogRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +43,7 @@ class AuditLogServiceImplTest {
         assertEquals(AuditEventMessageDataFactory.SERVICE_NAME, savedLog.getServiceName());
         assertEquals(AuditEventMessageDataFactory.ENTITY_NAME, savedLog.getEntityName());
         assertEquals(AuditEventMessageDataFactory.ENTITY_ID, savedLog.getEntityId());
-        assertEquals(AuditEventType.BOARD_DELETED, savedLog.getEventName());
+        assertEquals(BoardTaskAuditEventType.BOARD_DELETED, savedLog.getEventName());
         assertEquals(AuditEventMessageDataFactory.SYSTEM_USER_ID, savedLog.getPerformedBy());
         assertEquals(AuditEventMessageDataFactory.OLD_VALUE_JSON, savedLog.getOldValue());
         assertNull(savedLog.getNewValue());
@@ -51,11 +52,11 @@ class AuditLogServiceImplTest {
 
     @Test
     void shouldMapAllSupportedEventNameAliasesIgnoringCase() {
-        Map<String, AuditEventType> eventNames = Map.of(
-                AuditEventMessageDataFactory.DELETE_BOARD_EVENT, AuditEventType.BOARD_DELETED,
-                AuditEventMessageDataFactory.BOARD_DELETED_EVENT, AuditEventType.BOARD_DELETED,
-                AuditEventMessageDataFactory.UPDATE_BOARD_EVENT, AuditEventType.BOARD_UPDATED,
-                AuditEventMessageDataFactory.BOARD_UPDATED_EVENT, AuditEventType.BOARD_UPDATED);
+        Map<String, BoardTaskAuditEventType> eventNames = Map.of(
+                AuditEventMessageDataFactory.DELETE_BOARD_EVENT, BoardTaskAuditEventType.BOARD_DELETED,
+                AuditEventMessageDataFactory.BOARD_DELETED_EVENT, BoardTaskAuditEventType.BOARD_DELETED,
+                AuditEventMessageDataFactory.UPDATE_BOARD_EVENT, BoardTaskAuditEventType.BOARD_UPDATED,
+                AuditEventMessageDataFactory.BOARD_UPDATED_EVENT, BoardTaskAuditEventType.BOARD_UPDATED);
 
         eventNames.forEach((eventName, expectedEventType) -> {
             auditLogService.save(AuditEventMessageDataFactory.event(eventName,
@@ -67,9 +68,9 @@ class AuditLogServiceImplTest {
 
     @Test
     void shouldRejectNullAndUnsupportedEventNames() {
-        assertThrows(IllegalArgumentException.class, () -> auditLogService.save(
+        assertThrows(InvalidAuditEventException.class, () -> auditLogService.save(
                 AuditEventMessageDataFactory.event(null, AuditEventMessageDataFactory.SYSTEM_USER, null, null, null)));
-        assertThrows(IllegalArgumentException.class, () -> auditLogService.save(
+        assertThrows(InvalidAuditEventException.class, () -> auditLogService.save(
                 AuditEventMessageDataFactory.event(AuditEventMessageDataFactory.UNSUPPORTED_EVENT,
                         AuditEventMessageDataFactory.SYSTEM_USER, null, null, null)));
     }
@@ -94,7 +95,7 @@ class AuditLogServiceImplTest {
 
         AuditLog savedLog = capturedAuditLog();
         assertEquals(AuditEventMessageDataFactory.USER_ID, savedLog.getPerformedBy());
-        assertEquals(AuditEventType.BOARD_UPDATED, savedLog.getEventName());
+        assertEquals(BoardTaskAuditEventType.BOARD_UPDATED, savedLog.getEventName());
         assertEquals(AuditEventMessageDataFactory.newValueMap(),
                 new ObjectMapper().readValue(savedLog.getNewValue(), Map.class));
     }
