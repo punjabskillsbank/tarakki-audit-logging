@@ -26,7 +26,7 @@ public final class AuditEventMessageDataFactory {
     public static final String PLAIN_VALUE = "plain value";
     public static final String JSON_ARRAY = "[1,2]";
     public static final String SERIALIZED_PLAIN_VALUE = "\"plain value\"";
-    public static final String KAFKA_TOPIC = "audit-log-test-topic";
+    public static final String KAFKA_TOPIC = "audit-logging-test";
     public static final String KAFKA_CONSUMER_GROUP = "audit-log-test-consumer-group";
 
     private AuditEventMessageDataFactory() {
