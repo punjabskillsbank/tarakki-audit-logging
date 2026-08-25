@@ -52,7 +52,7 @@ public class AuditLogServiceImpl implements AuditLogService {
 
     private String mapEventName(String eventName) {
         if (eventName == null) {
-            throw new InvalidAuditEventException("Event name cannot be null");
+            throw new InvalidAuditEventException();
         }
         return eventName;
     }

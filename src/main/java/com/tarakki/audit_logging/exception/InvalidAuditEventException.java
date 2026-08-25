@@ -5,7 +5,7 @@ package com.tarakki.audit_logging.exception;
  */
 public class InvalidAuditEventException extends RuntimeException {
 
-    public InvalidAuditEventException(String message) {
-        super(message);
+    public InvalidAuditEventException() {
+        super("Event name cannot be null");
     }
 }
